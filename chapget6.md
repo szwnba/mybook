@@ -1,11 +1,11 @@
-# chapget2
+# chapget2234
 
-## Getting Super Powers
+## Getting Super Powerszjj
 
 Becoming a super hero is a fairly straight forward process:
 
 ```
-$ give me super-powers
+$ give me super-powersjJ
 ```
 
 {% hint style="info" %}
