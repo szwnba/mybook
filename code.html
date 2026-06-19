@@ -1,0 +1,2714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心栖 · MindNest — 专业人格心理测评平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════ */
+:root {
+  /* Warm, therapeutic palette */
+  --bg:              #FBF7F1;
+  --bg-warm:         #F5EDE2;
+  --bg-muted:        #EFE6D8;
+  --surface:         #FFFFFF;
+  --surface-warm:    #FAF4EC;
+  --surface-hover:   #FFF9F0;
+
+  --sage:            #6B8F71;
+  --sage-light:      #8AAD8F;
+  --sage-lighter:    #D4E5D6;
+  --sage-bg:         #EFF5F0;
+  --sage-dark:       #4F7555;
+
+  --terracotta:      #C4775B;
+  --terracotta-light:#D4957D;
+  --terracotta-bg:   #FBF0EC;
+
+  --warm-gold:       #B8935A;
+  --warm-gold-bg:    #FAF4E8;
+
+  --sky:             #7BA4B8;
+  --sky-bg:          #EDF4F8;
+
+  --lavender:        #9B8EC4;
+  --lavender-bg:     #F2EFF8;
+
+  --rose:            #C47B8A;
+  --rose-bg:         #FBF0F2;
+
+  --text-primary:    #2C2417;
+  --text-secondary:  #6B5E50;
+  --text-muted:      #A89888;
+  --text-faint:      #C4B8AA;
+
+  --border:          #E8DDD0;
+  --border-light:    #F0E8DD;
+  --border-hover:    #D4C4B0;
+
+  --shadow-sm:       0 1px 3px rgba(44,36,23,0.04), 0 1px 2px rgba(44,36,23,0.06);
+  --shadow-md:       0 4px 16px rgba(44,36,23,0.06), 0 2px 4px rgba(44,36,23,0.04);
+  --shadow-lg:       0 12px 40px rgba(44,36,23,0.08), 0 4px 12px rgba(44,36,23,0.04);
+  --shadow-xl:       0 24px 60px rgba(44,36,23,0.1), 0 8px 20px rgba(44,36,23,0.04);
+
+  --radius-sm:       8px;
+  --radius-md:       14px;
+  --radius-lg:       20px;
+  --radius-xl:       28px;
+  --radius-full:     100px;
+
+  --font-display:    'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+  --font-body:       'Noto Sans SC', -apple-system, sans-serif;
+  --font-mono:       'DM Mono', 'Menlo', monospace;
+
+  --ease-smooth:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sage-light) var(--bg-warm);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+}
+
+::selection { background: var(--sage-lighter); color: var(--sage-dark); }
+
+a { color: var(--sage-dark); text-decoration: none; transition: all 0.3s var(--ease-smooth); }
+a:hover { color: var(--sage); }
+
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+input, textarea { font-family: inherit; }
+
+/* Organic background texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(107,143,113,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(196,119,91,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(184,147,90,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY SYSTEM
+   ═══════════════════════════════════════════ */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.body-lg { font-size: 1.125rem; line-height: 1.8; }
+.body-md { font-size: 1rem; line-height: 1.75; }
+.body-sm { font-size: 0.875rem; line-height: 1.7; }
+
+/* ═══════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════ */
+
+/* ── Navigation ── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 4vw, 4rem);
+  background: rgba(251,247,241,0.8);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s var(--ease-smooth);
+}
+
+.nav.scrolled {
+  background: rgba(255,255,255,0.92);
+  border-bottom-color: var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--sage), var(--sage-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-logo::after {
+  content: '心';
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-display);
+}
+
+.nav-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.nav-title small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: -4px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s var(--ease-smooth);
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--sage-dark);
+  background: var(--sage-bg);
+}
+
+.nav-cta {
+  margin-left: 0.5rem;
+  padding: 10px 24px !important;
+  background: var(--sage) !important;
+  color: #fff !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+.nav-cta:hover {
+  background: var(--sage-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(107,143,113,0.3);
+}
+
+.nav-mobile-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.35s var(--ease-spring);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--sage);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--sage-dark);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(107,143,113,0.3);
+}
+
+.btn-warm {
+  background: var(--terracotta);
+  color: #fff;
+}
+
+.btn-warm:hover {
+  background: #b56a4d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(196,119,91,0.3);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover {
+  color: var(--sage-dark);
+  border-color: var(--sage);
+  background: var(--sage-bg);
+  transform: translateY(-2px);
+}
+
+.btn-sm { padding: 10px 22px; font-size: 0.85rem; }
+.btn-lg { padding: 18px 40px; font-size: 1.05rem; }
+
+/* ── Tags / Badges ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+  background: var(--sage-bg);
+  color: var(--sage-dark);
+}
+
+.tag--warm { background: var(--terracotta-bg); color: var(--terracotta); }
+.tag--gold { background: var(--warm-gold-bg); color: var(--warm-gold); }
+.tag--sky  { background: var(--sky-bg); color: var(--sky); }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+/* ── Section Wrapper ── */
+.section {
+  position: relative;
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 5rem);
+  z-index: 1;
+}
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  max-width: 640px;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.section-header.center { text-align: center; margin-left: auto; margin-right: auto; }
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.section-eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* ── Divider ── */
+.divider {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 100px clamp(1.5rem, 5vw, 5rem) 60px;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-deco {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-deco-1 {
+  width: 500px; height: 500px;
+  top: -8%; right: -5%;
+  background: radial-gradient(circle, rgba(107,143,113,0.08), transparent 70%);
+  animation: floatSlow 25s ease-in-out infinite;
+}
+
+.hero-deco-2 {
+  width: 350px; height: 350px;
+  bottom: 5%; left: -3%;
+  background: radial-gradient(circle, rgba(196,119,91,0.06), transparent 70%);
+  animation: floatSlow 20s ease-in-out infinite reverse;
+}
+
+.hero-deco-3 {
+  width: 200px; height: 200px;
+  top: 35%; right: 20%;
+  background: radial-gradient(circle, rgba(184,147,90,0.06), transparent 70%);
+  animation: floatSlow 18s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(15px,-20px) scale(1.03); }
+  50% { transform: translate(-10px,15px) scale(0.97); }
+  75% { transform: translate(20px,10px) scale(1.02); }
+}
+
+.hero-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-text { max-width: 580px; }
+
+.hero-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--sage);
+  letter-spacing: 0.06em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.1s forwards;
+}
+
+.hero-greeting-line {
+  width: 28px;
+  height: 1.5px;
+  background: var(--sage);
+  border-radius: 1px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.25s forwards;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--sage-dark);
+  position: relative;
+}
+
+.hero-title em::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: var(--sage-lighter);
+  border-radius: 4px;
+  z-index: -1;
+  opacity: 0.7;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.4s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.55s forwards;
+}
+
+.hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.7s forwards;
+}
+
+.hero-trust-avatars {
+  display: flex;
+}
+
+.hero-trust-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  margin-left: -8px;
+}
+
+.hero-trust-avatar:first-child { margin-left: 0; }
+.hero-trust-avatar:nth-child(1) { background: var(--sage-lighter); }
+.hero-trust-avatar:nth-child(2) { background: var(--terracotta-bg); }
+.hero-trust-avatar:nth-child(3) { background: var(--warm-gold-bg); }
+.hero-trust-avatar:nth-child(4) { background: var(--sky-bg); }
+.hero-trust-avatar:nth-child(5) { background: var(--lavender-bg); }
+
+.hero-trust-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.hero-trust-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out-expo) 0.5s forwards;
+}
+
+.hero-card-stack {
+  position: relative;
+  width: 380px;
+  height: 480px;
+}
+
+.hero-floating-card {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.5s var(--ease-spring);
+}
+
+.hero-floating-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: var(--shadow-xl);
+}
+
+.hfc-main {
+  width: 320px;
+  top: 20px;
+  left: 30px;
+  z-index: 3;
+}
+
+.hfc-mini-1 {
+  width: 200px;
+  top: 0;
+  right: -10px;
+  z-index: 2;
+  animation: floatCard 8s ease-in-out infinite;
+}
+
+.hfc-mini-2 {
+  width: 180px;
+  bottom: 10px;
+  left: -10px;
+  z-index: 4;
+  animation: floatCard 7s ease-in-out infinite reverse;
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.hfc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.hfc-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.hfc-type-code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.hfc-type-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.hfc-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.75rem;
+}
+
+.hfc-trait {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--bg-warm);
+  color: var(--text-secondary);
+}
+
+.hfc-bar-group {
+  margin-top: 1rem;
+}
+
+.hfc-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.hfc-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.hfc-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-warm);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hfc-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.5s var(--ease-out-expo);
+}
+
+.hfc-bar-fill.sage { background: var(--sage); }
+.hfc-bar-fill.terracotta { background: var(--terracotta); }
+.hfc-bar-fill.gold { background: var(--warm-gold); }
+.hfc-bar-fill.sky { background: var(--sky); }
+
+.hfc-mini-stat {
+  text-align: center;
+}
+
+.hfc-mini-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hfc-mini-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════
+   TRUST BAR
+   ═══════════════════════════════════════════ */
+.trust-bar {
+  background: var(--surface);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 2rem clamp(1.5rem, 5vw, 5rem);
+}
+
+.trust-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trust-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: var(--sage-bg);
+}
+
+.trust-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.trust-label strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════
+   FRAMEWORKS / METHODS SECTION
+   ═══════════════════════════════════════════ */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.method-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.method-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--method-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.method-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.method-card:hover::before { transform: scaleX(1); }
+
+.method-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+  background: var(--method-bg);
+}
+
+.method-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.method-full-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.method-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.method-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.method-features li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.method-features li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--method-color);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   16 TYPES SECTION
+   ═══════════════════════════════════════════ */
+.types-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.types-tab {
+  padding: 8px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  background: var(--surface);
+}
+
+.types-tab:hover {
+  border-color: var(--sage);
+  color: var(--sage-dark);
+}
+
+.types-tab.active {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+}
+
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.type-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.35s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.type-card:hover {
+  border-color: var(--type-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.type-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.type-code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--type-accent);
+  padding: 3px 8px;
+  background: var(--type-bg);
+  border-radius: 4px;
+}
+
+.type-emoji {
+  font-size: 1.3rem;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.type-card:hover .type-emoji { transform: scale(1.2) rotate(5deg); }
+
+.type-name-zh {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.type-name-en {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.type-desc-short {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════
+   QUIZ SECTION
+   ═══════════════════════════════════════════ */
+.quiz-bg {
+  background: var(--surface-warm);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.quiz-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.quiz-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.quiz-step-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.quiz-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-muted);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.quiz-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sage), var(--sage-light));
+  border-radius: 3px;
+  transition: width 0.6s var(--ease-out-expo);
+}
+
+.quiz-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: clamp(2rem, 4vw, 3rem);
+  box-shadow: var(--shadow-sm);
+}
+
+.quiz-question-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.quiz-question-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.quiz-choice {
+  padding: 1.1rem 1.5rem;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  background: var(--surface);
+}
+
+.quiz-choice:hover {
+  border-color: var(--sage-light);
+  background: var(--sage-bg);
+  color: var(--text-primary);
+  transform: translateX(6px);
+}
+
+.quiz-choice.selected {
+  border-color: var(--sage);
+  background: var(--sage-bg);
+  color: var(--text-primary);
+}
+
+.quiz-choice-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.quiz-choice.selected .quiz-choice-marker {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.quiz-nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.quiz-dim-indicators {
+  display: flex;
+  gap: 6px;
+}
+
+.quiz-dim-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.3s ease;
+}
+
+.quiz-dim-dot.active { background: var(--sage); transform: scale(1.2); }
+.quiz-dim-dot.done { background: var(--sage-light); }
+
+/* Quiz Result */
+.quiz-result-panel {
+  display: none;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.quiz-result-panel.show { display: block; }
+
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--sage-bg);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  animation: popIn 0.6s var(--ease-spring);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.result-type-code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--sage);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.25rem;
+}
+
+.result-type-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.result-category {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.result-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  line-height: 1.85;
+}
+
+.result-traits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  text-align: left;
+}
+
+.result-trait-card {
+  padding: 1rem;
+  background: var(--bg-warm);
+  border-radius: var(--radius-md);
+}
+
+.result-trait-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.result-trait-value {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.result-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════
+   HOW IT WORKS
+   ═══════════════════════════════════════════ */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  position: relative;
+}
+
+.steps-grid::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: calc(33.333% - 20px);
+  right: calc(33.333% - 20px);
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+
+.step-card {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--sage-dark);
+  margin: 0 auto 1.5rem;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.step-card:hover .step-number {
+  background: var(--sage);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.step-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════
+   RESOURCES SECTION
+   ═══════════════════════════════════════════ */
+.resources-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.resource-featured {
+  grid-row: span 2;
+  background: var(--surface);
+  border: 1.5px solid var(--sage-lighter);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s var(--ease-out-expo);
+  cursor: pointer;
+}
+
+.resource-featured:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.resource-featured-tag {
+  margin-bottom: 1rem;
+}
+
+.resource-featured-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.resource-featured:hover .resource-featured-title { color: var(--sage-dark); }
+
+.resource-featured-excerpt {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  flex: 1;
+}
+
+.resource-featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.resource-author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--sage-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+.resource-author-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.resource-author-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.resource-small-card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: all 0.4s var(--ease-out-expo);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-small-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.resource-small-cat {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.resource-small-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.resource-small-card:hover .resource-small-title { color: var(--sage-dark); }
+
+.resource-small-excerpt {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.resource-tags-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.resource-mini-tag {
+  font-size: 0.68rem;
+  padding: 2px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════
+   FAQ SECTION
+   ═══════════════════════════════════════════ */
+.faq-list {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: left;
+  transition: color 0.3s ease;
+}
+
+.faq-question:hover { color: var(--sage-dark); }
+
+.faq-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.faq-item.open .faq-icon {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease-out-expo), padding 0.4s var(--ease-out-expo);
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+}
+
+.faq-answer-inner {
+  padding-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+/* ═══════════════════════════════════════════
+   NEWSLETTER CTA
+   ═══════════════════════════════════════════ */
+.cta-banner {
+  background: linear-gradient(135deg, var(--sage-bg), var(--surface-warm));
+  border: 1px solid var(--sage-lighter);
+  border-radius: var(--radius-xl);
+  padding: clamp(2.5rem, 5vw, 4rem);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107,143,113,0.08), transparent 70%);
+}
+
+.cta-banner-content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-banner-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.cta-banner-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+}
+
+.cta-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.cta-input {
+  flex: 1;
+  padding: 14px 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.cta-input::placeholder { color: var(--text-muted); }
+.cta-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px var(--sage-lighter); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.footer {
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 5rem) 2rem;
+  border-top: 1px solid var(--border-light);
+  z-index: 1;
+  position: relative;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-top: 1rem;
+  max-width: 280px;
+}
+
+.footer-col-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+.footer-col a {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.footer-col a:hover {
+  color: var(--sage-dark);
+  padding-left: 4px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-bottom-links a { color: var(--text-muted); }
+.footer-bottom-links a:hover { color: var(--sage-dark); }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+.reveal-d6 { transition-delay: 0.48s; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .methods-grid { grid-template-columns: repeat(2, 1fr); }
+  .types-grid { grid-template-columns: repeat(2, 1fr); }
+  .resources-layout { grid-template-columns: 1fr; }
+  .resource-featured { grid-row: auto; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .steps-grid::before { display: none; }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-mobile-btn { display: block; }
+  .methods-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .result-traits-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+  .cta-form { flex-direction: column; }
+  .trust-bar-inner { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .types-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; align-items: stretch; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-brand">
+    <div class="nav-logo"></div>
+    <div class="nav-title">心栖 <small>MindNest</small></div>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#frameworks">理论基础</a></li>
+    <li><a href="#types">人格类型</a></li>
+    <li><a href="#quiz">开始测评</a></li>
+    <li><a href="#resources">资料库</a></li>
+    <li><a href="#faq">常见问题</a></li>
+    <li><a href="#quiz" class="nav-cta">免费测评</a></li>
+  </ul>
+  <button class="nav-mobile-btn" onclick="toggleMobile()" aria-label="菜单">☰</button>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" id="home">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-deco hero-deco-3"></div>
+
+  <div class="hero-grid">
+    <div class="hero-text">
+      <div class="hero-greeting">
+        <span class="hero-greeting-line"></span>
+        专业人格心理测评平台
+      </div>
+      <h1 class="hero-title">
+        认识你自己，<br>是一切<em>成长</em>的起点
+      </h1>
+      <p class="hero-desc">
+        基于荣格心理类型理论、大五人格模型等经典框架，
+        用科学的方法帮你理解思维偏好、情感模式与行为倾向。
+        不是给你贴标签，而是为你打开一扇理解自己的窗。
+      </p>
+      <div class="hero-actions">
+        <a href="#quiz" class="btn btn-primary btn-lg">
+          开始免费测评
+          <span>→</span>
+        </a>
+        <a href="#frameworks" class="btn btn-ghost btn-lg">
+          了解科学依据
+        </a>
+      </div>
+      <div class="hero-trust">
+        <div class="hero-trust-avatars">
+          <div class="hero-trust-avatar">🌿</div>
+          <div class="hero-trust-avatar">🧠</div>
+          <div class="hero-trust-avatar">📖</div>
+          <div class="hero-trust-avatar">💡</div>
+          <div class="hero-trust-avatar">🎯</div>
+        </div>
+        <div class="hero-trust-text">
+          <strong>50,000+</strong> 用户已完成测评<br>
+          <span style="font-size:0.8rem">基于 4 大权威心理学框架</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <!-- Main personality card -->
+        <div class="hero-floating-card hfc-main" style="transform: translateY(0);">
+          <div class="hfc-header">
+            <div class="hfc-icon" style="background:var(--sage-bg);">🌿</div>
+            <div>
+              <div class="hfc-type-code">INFP · T</div>
+              <div class="hfc-type-name">调停者</div>
+            </div>
+          </div>
+          <div class="hfc-traits">
+            <span class="hfc-trait">理想主义</span>
+            <span class="hfc-trait">共情力强</span>
+            <span class="hfc-trait">富有创意</span>
+            <span class="hfc-trait">内省</span>
+          </div>
+          <div class="hfc-bar-group">
+            <div class="hfc-bar-item">
+              <span class="hfc-bar-label">E / I</span>
+              <div class="hfc-bar-track"><div class="hfc-bar-fill sage" style="width:78%"></div></div>
+            </div>
+            <div class="hfc-bar-item">
+              <span class="hfc-bar-label">S / N</span>
+              <div class="hfc-bar-track"><div class="hfc-bar-fill terracotta" style="width:65%"></div></div>
+            </div>
+            <div class="hfc-bar-item">
+              <span class="hfc-bar-label">T / F</span>
+              <div class="hfc-bar-track"><div class="hfc-bar-fill gold" style="width:82%"></div></div>
+            </div>
+            <div class="hfc-bar-item">
+              <span class="hfc-bar-label">J / P</span>
+              <div class="hfc-bar-track"><div class="hfc-bar-fill sky" style="width:70%"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Mini card 1 -->
+        <div class="hero-floating-card hfc-mini-1">
+          <div class="hfc-mini-stat">
+            <div class="hfc-mini-stat-value" style="color:var(--sage);">4</div>
+            <div class="hfc-mini-stat-label">核心维度</div>
+          </div>
+        </div>
+        <!-- Mini card 2 -->
+        <div class="hero-floating-card hfc-mini-2">
+          <div class="hfc-mini-stat">
+            <div class="hfc-mini-stat-value" style="color:var(--terracotta);">16</div>
+            <div class="hfc-mini-stat-label">人格类型</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRUST BAR ═══════════ -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item reveal">
+      <div class="trust-icon">🏛️</div>
+      <div class="trust-label"><strong>学术理论支撑</strong>基于荣格心理类型理论</div>
+    </div>
+    <div class="trust-item reveal reveal-d1">
+      <div class="trust-icon" style="background:var(--terracotta-bg)">📊</div>
+      <div class="trust-label"><strong>多维度评估</strong>整合 4 大专业测评体系</div>
+    </div>
+    <div class="trust-item reveal reveal-d2">
+      <div class="trust-icon" style="background:var(--warm-gold-bg)">📚</div>
+      <div class="trust-label"><strong>持续更新</strong>每月收录最新研究文献</div>
+    </div>
+    <div class="trust-item reveal reveal-d3">
+      <div class="trust-icon" style="background:var(--sky-bg)">🔒</div>
+      <div class="trust-label"><strong>隐私保护</strong>测评数据仅用于个人分析</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FRAMEWORKS ═══════════ -->
+<section class="section" id="frameworks">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag">理论基础</span>
+      </div>
+      <h2 class="section-title">四大权威测评体系</h2>
+      <p class="section-subtitle">
+        我们整合了心理学领域最受认可的人格评估框架，从不同角度帮你构建完整的自我认知地图。
+      </p>
+    </div>
+
+    <div class="methods-grid">
+      <div class="method-card reveal" style="--method-color:var(--sage);--method-bg:var(--sage-bg)">
+        <div class="method-icon">🧩</div>
+        <div class="method-name">MBTI 人格类型</div>
+        <div class="method-full-name">Myers-Briggs Type Indicator</div>
+        <div class="method-desc">
+          基于荣格心理类型理论发展而来，通过四个二元维度（E/I、S/N、T/F、J/P）划分出 16 种人格类型，是全球应用最广泛的人格评估工具之一。
+        </div>
+        <ul class="method-features">
+          <li>16 种人格类型分类</li>
+          <li>认知功能栈深度分析</li>
+          <li>适用于自我认知与职业探索</li>
+        </ul>
+      </div>
+
+      <div class="method-card reveal reveal-d1" style="--method-color:var(--terracotta);--method-bg:var(--terracotta-bg)">
+        <div class="method-icon">🔬</div>
+        <div class="method-name">大五人格模型</div>
+        <div class="method-full-name">Big Five / OCEAN Model</div>
+        <div class="method-desc">
+          学术界最受认可的人格框架，将人格分解为开放性、尽责性、外倾性、宜人性和神经质五个维度，提供连续谱系而非二元分类。
+        </div>
+        <ul class="method-features">
+          <li>高信度与效度的科学验证</li>
+          <li>连续维度而非类型划分</li>
+          <li>学术研究首选工具</li>
+        </ul>
+      </div>
+
+      <div class="method-card reveal reveal-d2" style="--method-color:var(--warm-gold);--method-bg:var(--warm-gold-bg)">
+        <div class="method-icon">💎</div>
+        <div class="method-name">九型人格</div>
+        <div class="method-full-name">Enneagram of Personality</div>
+        <div class="method-desc">
+          从核心动机与恐惧出发，识别九种基本人格类型及其内在成长路径。深层关注「为什么」而非「是什么」，是自我成长的有力工具。
+        </div>
+        <ul class="method-features">
+          <li>9 种核心人格 + 18 种翼型</li>
+          <li>整合与瓦解方向图谱</li>
+          <li>深层动机与恐惧分析</li>
+        </ul>
+      </div>
+
+      <div class="method-card reveal reveal-d3" style="--method-color:var(--sky);--method-bg:var(--sky-bg)">
+        <div class="method-icon">⚡</div>
+        <div class="method-name">DISC 行为风格</div>
+        <div class="method-full-name">DISC Assessment</div>
+        <div class="method-desc">
+          聚焦可观察的行为模式，将行为风格分为支配(D)、影响(I)、稳健(S)、谨慎(C)四类，广泛应用于职场沟通与团队建设。
+        </div>
+        <ul class="method-features">
+          <li>简单易用的四象限模型</li>
+          <li>职场沟通优化利器</li>
+          <li>团队配置与领导力发展</li>
+        </ul>
+      </div>
+
+      <div class="method-card reveal reveal-d4" style="--method-color:var(--lavender);--method-bg:var(--lavender-bg)">
+        <div class="method-icon">🎯</div>
+        <div class="method-name">霍兰德职业兴趣</div>
+        <div class="method-full-name">Holland Code (RIASEC)</div>
+        <div class="method-desc">
+          将职业兴趣分为现实型、研究型、艺术型、社会型、企业型和常规型六类，帮助找到与人格最匹配的职业方向。
+        </div>
+        <ul class="method-features">
+          <li>6 种职业兴趣类型</li>
+          <li>人格-环境匹配理论</li>
+          <li>职业规划必备参考</li>
+        </ul>
+      </div>
+
+      <div class="method-card reveal reveal-d5" style="--method-color:var(--rose);--method-bg:var(--rose-bg)">
+        <div class="method-icon">🌊</div>
+        <div class="method-name">气质类型理论</div>
+        <div class="method-full-name">Four Temperaments</div>
+        <div class="method-desc">
+          源自古希腊的四种气质分类（多血质、胆汁质、粘液质、抑郁质），与现代神经科学形成呼应，帮助理解情绪反应的基本模式。
+        </div>
+        <ul class="method-features">
+          <li>4 种基本气质类型</li>
+          <li>情绪反应模式分析</li>
+          <li>理解人际互动风格</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ 16 TYPES ═══════════ -->
+<section class="section" id="types">
+  <div class="section-inner">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow" style="justify-content:center;">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag">人格图谱</span>
+      </div>
+      <h2 class="section-title">探索 16 种人格类型</h2>
+      <p class="section-subtitle" style="margin-left:auto;margin-right:auto;">
+        每种人格都有独特的认知方式和行为偏好。了解这些差异，不是为了分类，而是为了理解与欣赏人类心理的丰富性。
+      </p>
+    </div>
+
+    <div class="types-tabs reveal" id="typesTabs">
+      <button class="types-tab active" data-filter="all">全部类型</button>
+      <button class="types-tab" data-filter="analyst">分析家 NT</button>
+      <button class="types-tab" data-filter="diplomat">外交家 NF</button>
+      <button class="types-tab" data-filter="sentinel">守卫者 SJ</button>
+      <button class="types-tab" data-filter="explorer">探险家 SP</button>
+    </div>
+
+    <div class="types-grid" id="typesGrid">
+      <!-- Analysts -->
+      <div class="type-card reveal" data-group="analyst" style="--type-accent:var(--sky);--type-bg:var(--sky-bg)">
+        <div class="type-card-top">
+          <span class="type-code">INTJ</span>
+          <span class="type-emoji">🏗️</span>
+        </div>
+        <div class="type-name-zh">建筑师</div>
+        <div class="type-name-en">Architect</div>
+        <div class="type-desc-short">独立、有远见的战略思考者，擅长将复杂理论系统化为可执行计划。</div>
+      </div>
+      <div class="type-card reveal reveal-d1" data-group="analyst" style="--type-accent:var(--sky);--type-bg:var(--sky-bg)">
+        <div class="type-card-top">
+          <span class="type-code">INTP</span>
+          <span class="type-emoji">🔬</span>
+        </div>
+        <div class="type-name-zh">逻辑学家</div>
+        <div class="type-name-en">Logician</div>
+        <div class="type-desc-short">充满好奇心的创新者，沉浸在理论与逻辑的世界中寻找真理。</div>
+      </div>
+      <div class="type-card reveal reveal-d2" data-group="analyst" style="--type-accent:var(--sky);--type-bg:var(--sky-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ENTJ</span>
+          <span class="type-emoji">👑</span>
+        </div>
+        <div class="type-name-zh">指挥官</div>
+        <div class="type-name-en">Commander</div>
+        <div class="type-desc-short">果断高效的领导者，天然擅长制定策略并推动团队达成目标。</div>
+      </div>
+      <div class="type-card reveal reveal-d3" data-group="analyst" style="--type-accent:var(--sky);--type-bg:var(--sky-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ENTP</span>
+          <span class="type-emoji">⚡</span>
+        </div>
+        <div class="type-name-zh">辩论家</div>
+        <div class="type-name-en">Debater</div>
+        <div class="type-desc-short">机智灵活的思想挑战者，享受智力碰撞，总能找到新的可能性。</div>
+      </div>
+      <!-- Diplomats -->
+      <div class="type-card reveal" data-group="diplomat" style="--type-accent:var(--sage);--type-bg:var(--sage-bg)">
+        <div class="type-card-top">
+          <span class="type-code">INFJ</span>
+          <span class="type-emoji">🌌</span>
+        </div>
+        <div class="type-name-zh">提倡者</div>
+        <div class="type-name-en">Advocate</div>
+        <div class="type-desc-short">富有洞察力的理想主义者，安静而坚定地追求有意义的人生。</div>
+      </div>
+      <div class="type-card reveal reveal-d1" data-group="diplomat" style="--type-accent:var(--sage);--type-bg:var(--sage-bg)">
+        <div class="type-card-top">
+          <span class="type-code">INFP</span>
+          <span class="type-emoji">🦋</span>
+        </div>
+        <div class="type-name-zh">调停者</div>
+        <div class="type-name-en">Mediator</div>
+        <div class="type-desc-short">诗意的灵魂与深沉的共情者，用内在价值观指引人生方向。</div>
+      </div>
+      <div class="type-card reveal reveal-d2" data-group="diplomat" style="--type-accent:var(--sage);--type-bg:var(--sage-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ENFJ</span>
+          <span class="type-emoji">🌟</span>
+        </div>
+        <div class="type-name-zh">主人公</div>
+        <div class="type-name-en">Protagonist</div>
+        <div class="type-desc-short">富有感召力的引导者，天生关注他人成长并激发潜能。</div>
+      </div>
+      <div class="type-card reveal reveal-d3" data-group="diplomat" style="--type-accent:var(--sage);--type-bg:var(--sage-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ENFP</span>
+          <span class="type-emoji">🎭</span>
+        </div>
+        <div class="type-name-zh">竞选者</div>
+        <div class="type-name-en">Campaigner</div>
+        <div class="type-desc-short">热情洋溢的自由灵魂，总能在平凡中发现创意与惊喜。</div>
+      </div>
+      <!-- Sentinels -->
+      <div class="type-card reveal" data-group="sentinel" style="--type-accent:var(--warm-gold);--type-bg:var(--warm-gold-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ISTJ</span>
+          <span class="type-emoji">📋</span>
+        </div>
+        <div class="type-name-zh">物流师</div>
+        <div class="type-name-en">Logistician</div>
+        <div class="type-desc-short">可靠务实的执行者，重视责任与秩序，值得托付的行动派。</div>
+      </div>
+      <div class="type-card reveal reveal-d1" data-group="sentinel" style="--type-accent:var(--warm-gold);--type-bg:var(--warm-gold-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ISFJ</span>
+          <span class="type-emoji">🛡️</span>
+        </div>
+        <div class="type-name-zh">守护者</div>
+        <div class="type-name-en">Defender</div>
+        <div class="type-desc-short">温暖而忠诚的守护者，默默用行动照顾身边每一个人。</div>
+      </div>
+      <div class="type-card reveal reveal-d2" data-group="sentinel" style="--type-accent:var(--warm-gold);--type-bg:var(--warm-gold-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ESTJ</span>
+          <span class="type-emoji">📊</span>
+        </div>
+        <div class="type-name-zh">总经理</div>
+        <div class="type-name-en">Executive</div>
+        <div class="type-desc-short">高效的组织管理者，擅长建立秩序和推动目标落地执行。</div>
+      </div>
+      <div class="type-card reveal reveal-d3" data-group="sentinel" style="--type-accent:var(--warm-gold);--type-bg:var(--warm-gold-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ESFJ</span>
+          <span class="type-emoji">🤝</span>
+        </div>
+        <div class="type-name-zh">执政官</div>
+        <div class="type-name-en">Consul</div>
+        <div class="type-desc-short">热心周到的协调者，善于营造温暖氛围让每个人被重视。</div>
+      </div>
+      <!-- Explorers -->
+      <div class="type-card reveal" data-group="explorer" style="--type-accent:var(--terracotta);--type-bg:var(--terracotta-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ISTP</span>
+          <span class="type-emoji">🔧</span>
+        </div>
+        <div class="type-name-zh">鉴赏家</div>
+        <div class="type-name-en">Virtuoso</div>
+        <div class="type-desc-short">冷静灵活的实操者，享受用双手解决问题，适应力极强。</div>
+      </div>
+      <div class="type-card reveal reveal-d1" data-group="explorer" style="--type-accent:var(--terracotta);--type-bg:var(--terracotta-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ISFP</span>
+          <span class="type-emoji">🎨</span>
+        </div>
+        <div class="type-name-zh">探险家</div>
+        <div class="type-name-en">Adventurer</div>
+        <div class="type-desc-short">安静而敏感的艺术灵魂，用行动和体验表达内心世界之美。</div>
+      </div>
+      <div class="type-card reveal reveal-d2" data-group="explorer" style="--type-accent:var(--terracotta);--type-bg:var(--terracotta-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ESTP</span>
+          <span class="type-emoji">🚀</span>
+        </div>
+        <div class="type-name-zh">企业家</div>
+        <div class="type-name-en">Entrepreneur</div>
+        <div class="type-desc-short">充满活力的行动派，善于把握当下机会，反应敏捷果断。</div>
+      </div>
+      <div class="type-card reveal reveal-d3" data-group="explorer" style="--type-accent:var(--terracotta);--type-bg:var(--terracotta-bg)">
+        <div class="type-card-top">
+          <span class="type-code">ESFP</span>
+          <span class="type-emoji">🎤</span>
+        </div>
+        <div class="type-name-zh">表演者</div>
+        <div class="type-name-en">Entertainer</div>
+        <div class="type-desc-short">热情开朗的活力源泉，用感染力让每个场合更有趣。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ QUIZ ═══════════ -->
+<section class="section quiz-bg" id="quiz">
+  <div class="section-inner">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow" style="justify-content:center;">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag">互动测评</span>
+      </div>
+      <h2 class="section-title">开始你的人格探索之旅</h2>
+      <p class="section-subtitle" style="margin-left:auto;margin-right:auto;">
+        请根据你最自然的反应来选择，没有对错之分。真实地回答，才能获得最准确的结果。
+      </p>
+    </div>
+
+    <div class="quiz-wrapper reveal">
+      <div class="quiz-progress-row" id="quizProgressRow">
+        <span class="quiz-step-label" id="quizStepLabel">问题 1 / 10</span>
+        <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill" style="width:10%"></div></div>
+      </div>
+
+      <div class="quiz-card" id="quizCard">
+        <div id="quizBody">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <div class="quiz-result-panel" id="quizResult">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section class="section" id="how">
+  <div class="section-inner">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow" style="justify-content:center;">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag--warm tag">使用指南</span>
+      </div>
+      <h2 class="section-title">三步开启自我认知</h2>
+      <p class="section-subtitle" style="margin-left:auto;margin-right:auto;">
+        简单、温和、有深度。不需要心理学背景，只需要你真诚地面对自己。
+      </p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-number">1</div>
+        <div class="step-title">回答问题</div>
+        <div class="step-desc">在安静的环境下，根据直觉选择最符合你真实倾向的选项。没有标准答案，真实最重要。</div>
+      </div>
+      <div class="step-card reveal reveal-d1">
+        <div class="step-number">2</div>
+        <div class="step-title">获取报告</div>
+        <div class="step-desc">系统将从多个维度分析你的人格特征，生成包含类型描述、优势分析与成长建议的个人报告。</div>
+      </div>
+      <div class="step-card reveal reveal-d2">
+        <div class="step-number">3</div>
+        <div class="step-title">深入探索</div>
+        <div class="step-desc">浏览资料库中你感兴趣的人格研究、发展建议和应用场景，将自我认知转化为实际行动。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ RESOURCES ═══════════ -->
+<section class="section" id="resources">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag">精选资料</span>
+      </div>
+      <h2 class="section-title">人格研究资料库</h2>
+      <p class="section-subtitle">
+        定期收录全球最新、最专业的人格心理学研究与实践应用，帮你持续深化对人格的理解。
+      </p>
+    </div>
+
+    <div class="resources-layout">
+      <div class="resource-featured reveal">
+        <span class="tag resource-featured-tag">深度解读 · 2025 年 6 月</span>
+        <div class="resource-featured-title">认知功能理论深度指南：从主导到劣势，理解你的思维偏好层次</div>
+        <div class="resource-featured-excerpt">
+          了解 MBTI 四字母只是起点。真正的深度理解来自认知功能（Cognitive Functions）——主导功能如何塑造你的核心思维模式？辅助功能如何平衡你的决策？本文逐层拆解 8 种认知功能的运作机制，帮你超越表面类型，理解心智的内在结构。
+        </div>
+        <div class="resource-featured-meta">
+          <div class="resource-author-avatar">📖</div>
+          <div>
+            <div class="resource-author-name">Persona Research Team</div>
+            <div class="resource-author-date">2025 年 6 月 10 日</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resource-small-card reveal reveal-d1">
+        <div class="resource-small-cat">应用场景</div>
+        <div class="resource-small-title">不同人格类型的压力信号与自我调节策略</div>
+        <div class="resource-small-excerpt">当每种人格类型「失控」时会呈现什么特征？如何提前识别并温柔地拉回自己？</div>
+        <div class="resource-tags-row">
+          <span class="resource-mini-tag">压力管理</span>
+          <span class="resource-mini-tag">自我调节</span>
+        </div>
+      </div>
+
+      <div class="resource-small-card reveal reveal-d2">
+        <div class="resource-small-cat">人际关系</div>
+        <div class="resource-small-title">人格兼容性迷思：MBTI 类型之间真的有「最佳配对」吗？</div>
+        <div class="resource-small-excerpt">跳出简单配对思维，从认知功能互补角度理解深度关系的可能。</div>
+        <div class="resource-tags-row">
+          <span class="resource-mini-tag">关系</span>
+          <span class="resource-mini-tag">认知功能</span>
+        </div>
+      </div>
+
+      <div class="resource-small-card reveal reveal-d3">
+        <div class="resource-small-cat">学术前沿</div>
+        <div class="resource-small-title">人格的可塑性：你的性格真的不会变吗？</div>
+        <div class="resource-small-excerpt">最新纵向研究揭示，人格特质在一生中持续演化，关键转折点是什么？</div>
+        <div class="resource-tags-row">
+          <span class="resource-mini-tag">人格发展</span>
+          <span class="resource-mini-tag">研究</span>
+        </div>
+      </div>
+
+      <div class="resource-small-card reveal reveal-d4">
+        <div class="resource-small-cat">职场应用</div>
+        <div class="resource-small-title">基于人格的领导力发展：不同类型的管理风格与成长建议</div>
+        <div class="resource-small-excerpt">每种人格都有独特的领导力潜能，关键是发展你天然擅长的方式而非模仿他人。</div>
+        <div class="resource-tags-row">
+          <span class="resource-mini-tag">领导力</span>
+          <span class="resource-mini-tag">职场</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="section-header center reveal">
+      <div class="section-eyebrow" style="justify-content:center;">
+        <div class="section-eyebrow-dot"></div>
+        <span class="tag">常见问题</span>
+      </div>
+      <h2 class="section-title">关于人格测评，你可能想了解</h2>
+    </div>
+
+    <div class="faq-list" id="faqList">
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>人格测试的结果准确吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          人格测试提供的是一个自我理解的框架，而非绝对的科学定论。它的价值在于帮你组织和表达那些你已经隐约感知到的模式。测评结果会受到你当天状态、自我认知程度等因素影响。建议把结果视为「当前最接近的画像」，而非一成不变的标签。多次测评、结合不同框架来看，会获得更完整的画面。
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-d1">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>MBTI 和大五人格，应该信哪个？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          它们从不同角度描述人格，并非非此即彼。大五人格在学术研究中信效度更高，以连续维度呈现特质差异；MBTI 在自我反思和团队沟通中更容易理解和应用。最理想的方式是将两者结合使用：用大五了解自己的特质分布，用 MBTI 理解自己的思维和决策偏好。
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-d2">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>我的结果和上次不一样，正常吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          完全正常。首先，人格的一些维度本身就处于连续谱上，你可能处于两个偏好之间。其次，你对自己的理解在不断深化，更真实的回答自然会带来不同的结果。这不代表测试不准确，恰恰说明你在不断地认识自己。建议关注那些反复出现的模式，而非纠结于单个字母。
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-d3">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>人格测评可以用来筛选人才吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          不建议将人格类型作为招聘筛选的唯一或主要标准。人格类型没有好坏之分，每种类型都有适合的岗位和环境。更科学的做法是：用它来帮助已入职的员工更好地理解自己的工作风格、优化团队沟通和协作方式。在职业规划方面，它是很好的自我探索工具，但不应该是唯一的决策依据。
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-d4">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>测评结果可以作为心理诊断依据吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          不能。人格类型测评与临床心理诊断是完全不同的工具。MBTI、九型人格等测评旨在描述正常的人格差异，不涉及心理障碍的评估与诊断。如果你正在经历心理困扰，请寻求专业心理咨询师或精神科医生的帮助。心理测评是一个自我了解的工具，而不是医疗或临床诊断工具。
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ NEWSLETTER CTA ═══════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="cta-banner reveal">
+      <div class="cta-banner-content">
+        <h2 class="cta-banner-title">让理解成为一种习惯</h2>
+        <p class="cta-banner-desc">
+          订阅我们的月度通讯，接收最新的人格心理学研究、深度解读文章与实用成长建议。
+        </p>
+        <form class="cta-form" onsubmit="handleSubscribe(event)">
+          <input type="email" class="cta-input" placeholder="输入你的邮箱地址" required>
+          <button type="submit" class="btn btn-primary" id="subscribeBtn">订阅通讯</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="nav-brand" style="margin-bottom:0">
+          <div class="nav-logo"></div>
+          <div class="nav-title">心栖 <small>MindNest</small></div>
+        </div>
+        <p class="footer-brand-text">
+          致力于用科学且温和的方式，帮助每个人更好地理解自己与他人。认识自己，是所有成长的起点。
+        </p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">测评工具</div>
+        <ul>
+          <li><a href="#">MBTI 人格测试</a></li>
+          <li><a href="#">大五人格量表</a></li>
+          <li><a href="#">九型人格测评</a></li>
+          <li><a href="#">DISC 行为风格</a></li>
+          <li><a href="#">霍兰德职业兴趣</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">学习资源</div>
+        <ul>
+          <li><a href="#">人格理论入门</a></li>
+          <li><a href="#">认知功能指南</a></li>
+          <li><a href="#">研究论文库</a></li>
+          <li><a href="#">推荐书单</a></li>
+          <li><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">关于</div>
+        <ul>
+          <li><a href="#">关于心栖</a></li>
+          <li><a href="#">学术顾问</a></li>
+          <li><a href="#">投稿合作</a></li>
+          <li><a href="#">隐私政策</a></li>
+          <li><a href="#">使用条款</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 心栖 MindNest · 人格探索实验室</span>
+      <div class="footer-bottom-links">
+        <a href="#">隐私政策</a>
+        <a href="#">使用条款</a>
+        <a href="#">联系我们</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════ -->
+<script>
+// ─── Scroll Reveal ───
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ─── Nav Scroll ───
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── Mobile Nav ───
+function toggleMobile() {
+  const links = document.getElementById('navLinks');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.position = 'absolute';
+  links.style.top = '72px';
+  links.style.left = '0';
+  links.style.right = '0';
+  links.style.flexDirection = 'column';
+  links.style.background = 'rgba(255,255,255,0.98)';
+  links.style.padding = '1rem';
+  links.style.borderBottom = '1px solid var(--border-light)';
+  links.style.boxShadow = 'var(--shadow-md)';
+}
+
+// ─── FAQ Accordion ───
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ─── Types Filter ───
+document.querySelectorAll('.types-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.types-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter = tab.dataset.filter;
+    document.querySelectorAll('.type-card').forEach(card => {
+      if (filter === 'all' || card.dataset.group === filter) {
+        card.style.display = '';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px)';
+        requestAnimationFrame(() => {
+          card.style.transition = 'all 0.4s var(--ease-out-expo)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        });
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ─── Subscribe ───
+function handleSubscribe(e) {
+  e.preventDefault();
+  const btn = document.getElementById('subscribeBtn');
+  btn.textContent = '已订阅 ✓';
+  btn.style.background = 'var(--sage-dark)';
+}
+
+// ═══════════ QUIZ ENGINE ═══════════
+const quizData = [
+  {
+    q: '一个完全空闲的周末，你最可能选择？',
+    hint: '选让你感到放松和充实的那个',
+    a: { text: '约朋友出去活动，或者参加聚会社交', dim: 'E' },
+    b: { text: '在家看书、听播客，或者一个人做点喜欢的事', dim: 'I' },
+  },
+  {
+    q: '你在学习或工作时，更偏好？',
+    hint: '不是能力问题，而是天然倾向',
+    a: { text: '按照清晰的步骤和时间表执行', dim: 'J' },
+    b: { text: '保持灵活性，根据进展随时调整方向', dim: 'P' },
+  },
+  {
+    q: '当朋友向你描述一个新想法时，你首先会想到？',
+    hint: '你的第一反应',
+    a: { text: '这个具体怎么落地？需要什么条件？', dim: 'S' },
+    b: { text: '这让我联想到什么更大可能性？', dim: 'N' },
+  },
+  {
+    q: '做一个重要决定时，你更看重？',
+    hint: '两种方式都是合理的',
+    a: { text: '逻辑分析，权衡利弊', dim: 'T' },
+    b: { text: '内心感受，以及对相关人员的影响', dim: 'F' },
+  },
+  {
+    q: '在团队中，你通常自然地？',
+    hint: '不是你想不想，而是你自然而然会做的',
+    a: { text: '表达想法、发起讨论，推动团队行动', dim: 'E' },
+    b: { text: '先倾听和观察，在有把握时再发言', dim: 'I' },
+  },
+  {
+    q: '阅读一篇文章时，你更容易注意到？',
+    hint: '',
+    a: { text: '具体的事实、数据和案例', dim: 'S' },
+    b: { text: '文章背后的主题、隐喻和深层含义', dim: 'N' },
+  },
+  {
+    q: '如果两个朋友发生冲突来找你调解，你会？',
+    hint: '',
+    a: { text: '客观分析双方的对错，找出公正的解决方案', dim: 'T' },
+    b: { text: '先关注双方的感受，帮助他们互相理解', dim: 'F' },
+  },
+  {
+    q: '你的桌面（物理或电脑）通常是？',
+    hint: '诚实地描述，不是理想状态',
+    a: { text: '有条理，东西放在固定位置', dim: 'J' },
+    b: { text: '有一定秩序但比较随意，有时会比较乱', dim: 'P' },
+  },
+  {
+    q: '在社交场合结束时，你通常感到？',
+    hint: '即使你很享受社交',
+    a: { text: '精力充沛，还想继续聊', dim: 'E' },
+    b: { text: '虽然开心但需要独处来恢复能量', dim: 'I' },
+  },
+  {
+    q: '面对一个从未做过的新任务，你更倾向于？',
+    hint: '',
+    a: { text: '先参考已有的成功案例和方法', dim: 'S' },
+    b: { text: '自己构思一套全新的思路和方案', dim: 'N' },
+  },
+];
+
+const typeInfo = {
+  INTJ: { name:'建筑师', emoji:'🏗️', cat:'分析家', catColor:'var(--sky)', catBg:'var(--sky-bg)', desc:'你是一个独立而有远见的战略思考者。你善于看到事物的全貌，将复杂理论转化为系统化的行动方案。你追求效率和深度，喜欢在安静中构建属于自己的思想体系。', strengths:['战略思维','独立自主','高效执行','深度分析'], growth:['灵活性','情感表达','团队协作','耐心倾听'] },
+  INTP: { name:'逻辑学家', emoji:'🔬', cat:'分析家', catColor:'var(--sky)', catBg:'var(--sky-bg)', desc:'你是一个充满好奇心的创新者，沉浸在理论和逻辑的世界中。你喜欢拆解问题、发现规律，在知识的海洋中寻找真理。你的内心世界丰富而精密。', strengths:['逻辑分析','创新思维','客观理性','知识深度'], growth:['实践落地','时间管理','社交连接','情感关注'] },
+  ENTJ: { name:'指挥官', emoji:'👑', cat:'分析家', catColor:'var(--sky)', catBg:'var(--sky-bg)', desc:'你是一个果断高效的领导者，天然具备组织资源、制定策略和推动目标达成的能力。你有清晰的愿景，并且有将愿景变为现实的执行力。', strengths:['领导力','战略规划','果断决策','推动执行'], growth:['倾听耐心','灵活性','情感体察','授权放手'] },
+  ENTP: { name:'辩论家', emoji:'⚡', cat:'分析家', catColor:'var(--sky)', catBg:'var(--sky-bg)', desc:'你机智灵活，热爱思想的碰撞与挑战。你总能从不同角度看问题，找到别人想不到的可能性。你是天生的创新者和可能性探索者。', strengths:['创新思维','灵活应变','辩论能力','开阔视野'], growth:['深度专注','完成项目','情感敏感度','细节关注'] },
+  INFJ: { name:'提倡者', emoji:'🌌', cat:'外交家', catColor:'var(--sage)', catBg:'var(--sage-bg)', desc:'你是一个富有洞察力的理想主义者，安静而坚定地追求有意义的人生。你能感知他人未说出口的需求，并用自己的方式默默让世界变得更好。', strengths:['深度洞察','共情能力','理想驱动','坚定信念'], growth:['自我关怀','设定界限','接受不完美','行动力'] },
+  INFP: { name:'调停者', emoji:'🦋', cat:'外交家', catColor:'var(--sage)', catBg:'var(--sage-bg)', desc:'你是一个诗意而深沉的灵魂，拥有强烈的个人价值观和丰富的内在世界。你追求真实与和谐，渴望在生命中找到深层的意义和连接。', strengths:['创造力','深度共情','价值坚守','想象力'], growth:['面对冲突','实际执行','自我肯定','情绪管理'] },
+  ENFJ: { name:'主人公', emoji:'🌟', cat:'外交家', catColor:'var(--sage)', catBg:'var(--sage-bg)', desc:'你是一个富有感召力的引导者，天生关注他人的成长与潜能。你善于激励和带领身边的人，同时也在这种连接中找到自己的价值。', strengths:['激励他人','组织能力','人际敏感度','愿景传达'], growth:['自我需求','拒绝他人','独立判断','休息充电'] },
+  ENFP: { name:'竞选者', emoji:'🎭', cat:'外交家', catColor:'var(--sage)', catBg:'var(--sage-bg)', desc:'你热情洋溢、充满创意，总能在平凡中发现非凡。你对生活充满好奇心和感染力，能带动周围的人看到更多可能性。', strengths:['创意灵感','人际感染力','热情乐观','适应变化'], growth:['深度坚持','时间管理','情绪稳定','细节执行'] },
+  ISTJ: { name:'物流师', emoji:'📋', cat:'守卫者', catColor:'var(--warm-gold)', catBg:'var(--warm-gold-bg)', desc:'你是一个可靠务实的执行者，重视责任、传统和秩序。你的组织能力出色，是任何团队中最值得信赖的那个人。说到做到是你的标签。', strengths:['可靠性','组织能力','细节把控','坚持不懈'], growth:['灵活性','接受变化','创新思维','情感表达'] },
+  ISFJ: { name:'守护者', emoji:'🛡️', cat:'守卫者', catColor:'var(--warm-gold)', catBg:'var(--warm-gold-bg)', desc:'你是一个温暖而忠诚的守护者，默默关注身边人的需要并用实际行动表达关爱。你是关系中的稳定力量，让人感到安心和被照顾。', strengths:['细心体贴','忠诚可靠','实际帮助','观察力'], growth:['自我优先','表达需求','接受赞美','说"不"'] },
+  ESTJ: { name:'总经理', emoji:'📊', cat:'守卫者', catColor:'var(--warm-gold)', catBg:'var(--warm-gold-bg)', desc:'你是一个高效的组织管理者，擅长建立秩序、分配任务和推动目标达成。你注重规则和标准，是可靠的组织支柱和团队核心。', strengths:['执行力','组织协调','标准制定','责任担当'], growth:['倾听他人','灵活变通','情感关怀','创新尝试'] },
+  ESFJ: { name:'执政官', emoji:'🤝', cat:'守卫者', catColor:'var(--warm-gold)', catBg:'var(--warm-gold-bg)', desc:'你是一个热心周到的协调者，重视和谐与归属感。你善于营造温暖的氛围，让每个人都感到被重视和欢迎。你常常是团队的情感粘合剂。', strengths:['人际协调','关怀照顾','组织能力','氛围营造'], growth:['自我关怀','独立决策','面对冲突','接纳差异'] },
+  ISTP: { name:'鉴赏家', emoji:'🔧', cat:'探险家', catColor:'var(--terracotta)', catBg:'var(--terracotta-bg)', desc:'你是一个冷静灵活的实操者，享受用双手解决问题。你适应力极强，在压力下依然能保持冷静和理性。你更喜欢做而不是说。', strengths:['问题解决','冷静应变','实际操作','独立自主'], growth:['长期规划','情感沟通','团队合作','表达感受'] },
+  ISFP: { name:'探险家', emoji:'🎨', cat:'探险家', catColor:'var(--terracotta)', catBg:'var(--terracotta-bg)', desc:'你是一个安静而敏感的艺术灵魂，善于感受生活中的美。你用行动和体验表达内心世界，活在当下，珍视每一个真实的感受。', strengths:['审美敏感','温和善良','灵活适应','真实自然'], growth:['长期规划','主动表达','面对冲突','自我推广'] },
+  ESTP: { name:'企业家', emoji:'🚀', cat:'探险家', catColor:'var(--terracotta)', catBg:'var(--terracotta-bg)', desc:'你是一个充满活力的行动派，善于把握当下的机会。你反应敏捷、果断干脆，是天生的问题解决者和冒险家。', strengths:['行动力','危机处理','务实高效','社交能力'], growth:['长期视角','深度思考','耐心等待','情感细腻'] },
+  ESFP: { name:'表演者', emoji:'🎤', cat:'探险家', catColor:'var(--terracotta)', catBg:'var(--terracotta-bg)', desc:'你是一个热情开朗的活力源泉，总能让周围的人感到快乐和被感染。你活在当下，善于发现生活中的乐趣和惊喜。', strengths:['感染力','乐观精神','实际帮助','随机应变'], growth:['长期规划','独处能力','面对严肃话题','坚持目标'] },
+};
+
+let qIdx = 0;
+let quizAnswers = new Array(quizData.length).fill(null);
+
+function renderQuiz() {
+  const q = quizData[qIdx];
+  const body = document.getElementById('quizBody');
+  body.innerHTML = `
+    <div class="quiz-question-text">${q.q}</div>
+    ${q.hint ? `<div class="quiz-question-hint">${q.hint}</div>` : '<div style="margin-bottom:1.5rem"></div>'}
+    <div class="quiz-choices">
+      <div class="quiz-choice ${quizAnswers[qIdx] === 'a' ? 'selected' : ''}" onclick="pickAnswer('a')">
+        <div class="quiz-choice-marker">A</div>
+        <span>${q.a.text}</span>
+      </div>
+      <div class="quiz-choice ${quizAnswers[qIdx] === 'b' ? 'selected' : ''}" onclick="pickAnswer('b')">
+        <div class="quiz-choice-marker">B</div>
+        <span>${q.b.text}</span>
+      </div>
+    </div>
+    <div class="quiz-nav-row">
+      <div class="quiz-dim-indicators" id="dimDots"></div>
+      <div style="display:flex;gap:0.5rem;">
+        ${qIdx > 0 ? '<button class="btn btn-ghost btn-sm" onclick="goQuiz(-1)">← 上一题</button>' : ''}
+        <button class="btn ${quizAnswers[qIdx] ? 'btn-primary' : 'btn-ghost'} btn-sm" onclick="goQuiz(1)">${qIdx === quizData.length - 1 ? '查看结果' : '下一题 →'}</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('quizStepLabel').textContent = `问题 ${qIdx + 1} / ${quizData.length}`;
+  document.getElementById('quizBarFill').style.width = `${((qIdx + 1) / quizData.length) * 100}%`;
+
+  // Dimension dots
+  const dims = ['E/I','S/N','T/F','J/P'];
+  const dotsEl = document.getElementById('dimDots');
+  if (dotsEl) {
+    dotsEl.innerHTML = dims.map((d, i) => {
+      const relatedQs = quizData.filter((_, qi) => {
+        const dim = quizData[qi].a.dim;
+        return dim === d.split('/')[0] || dim === d.split('/')[1];
+      });
+      const done = relatedQs.length > 0 ? 'done' : '';
+      const active = (i === Math.floor(qIdx / 2.5)) ? 'active' : '';
+      return `<div class="quiz-dim-dot ${active} ${done}"></div>`;
+    }).join('');
+  }
+}
+
+function pickAnswer(val) {
+  quizAnswers[qIdx] = val;
+  renderQuiz();
+}
+
+function goQuiz(dir) {
+  if (dir === 1 && !quizAnswers[qIdx]) return;
+  if (dir === 1 && qIdx === quizData.length - 1) { showQuizResult(); return; }
+  qIdx = Math.max(0, Math.min(quizData.length - 1, qIdx + dir));
+  renderQuiz();
+}
+
+function showQuizResult() {
+  const scores = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+  quizData.forEach((q, i) => {
+    if (quizAnswers[i]) scores[q[quizAnswers[i]].dim]++;
+  });
+
+  const type = (scores.E > scores.I ? 'E' : 'I') +
+               (scores.S > scores.N ? 'S' : 'N') +
+               (scores.T > scores.F ? 'T' : 'F') +
+               (scores.J > scores.P ? 'J' : 'P');
+
+  const info = typeInfo[type] || {};
+  const dims = [
+    { label:'E/I', left:'外倾 E', right:'内倾 I', eVal:scores.E, iVal:scores.I },
+    { label:'S/N', left:'实感 S', right:'直觉 N', eVal:scores.S, iVal:scores.N },
+    { label:'T/F', left:'思考 T', right:'情感 F', eVal:scores.T, iVal:scores.F },
+    { label:'J/P', left:'判断 J', right:'感知 P', eVal:scores.J, iVal:scores.P },
+  ];
+
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('quizProgressRow').style.display = 'none';
+
+  const panel = document.getElementById('quizResult');
+  panel.classList.add('show');
+  panel.innerHTML = `
+    <div class="result-badge">${info.emoji || '✨'}</div>
+    <div class="result-type-code">${type}</div>
+    <div class="result-type-name">${info.name || type}</div>
+    <div class="result-category" style="background:${info.catBg};color:${info.catColor}">${info.cat || ''}</div>
+    <div class="result-desc">${info.desc || ''}</div>
+
+    <div class="result-traits-grid">
+      ${dims.map(d => {
+        const total = d.eVal + d.iVal || 1;
+        const leftP = Math.round((d.eVal / total) * 100);
+        const rightP = 100 - leftP;
+        const winner = d.eVal >= d.iVal ? d.left : d.right;
+        return `
+          <div class="result-trait-card">
+            <div class="result-trait-label">${d.left} / ${d.right.split(' ')[1]}</div>
+            <div class="result-trait-value" style="font-size:0.95rem;margin-top:4px;">
+              <span style="color:${d.eVal >= d.iVal ? 'var(--sage-dark)' : 'var(--text-muted)'}">${leftP}%</span>
+              <span style="color:var(--text-muted);font-size:0.75rem;"> · </span>
+              <span style="color:${d.iVal > d.eVal ? 'var(--sage-dark)' : 'var(--text-muted)'}">${rightP}%</span>
+            </div>
+            <div style="margin-top:8px;height:6px;border-radius:3px;background:var(--bg-muted);overflow:hidden;display:flex;">
+              <div style="width:${leftP}%;background:var(--sage);border-radius:3px 0 0 3px;"></div>
+              <div style="width:${rightP}%;background:var(--border);border-radius:0 3px 3px 0;"></div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+
+      <div class="result-trait-card">
+        <div class="result-trait-label">核心优势</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+          ${(info.strengths || []).map(s => `<span style="padding:3px 10px;background:var(--sage-bg);color:var(--sage-dark);border-radius:100px;font-size:0.75rem;">${s}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-primary" onclick="resetQuiz()">重新测试</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('types').scrollIntoView({behavior:'smooth'})">浏览所有类型</button>
+    </div>
+  `;
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  qIdx = 0;
+  quizAnswers = new Array(quizData.length).fill(null);
+  document.getElementById('quizCard').style.display = '';
+  document.getElementById('quizProgressRow').style.display = '';
+  document.getElementById('quizResult').classList.remove('show');
+  renderQuiz();
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Init
+renderQuiz();
+</script>
+</body>
+</html>
